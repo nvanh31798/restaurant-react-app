@@ -1,10 +1,25 @@
 import React from "react";
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { MdFastfood, MdCloudUpload } from "react-icons/md";
+import {
+  MdFastfood,
+  MdCloudUpload,
+  MdDelete,
+  MdFoodBank,
+  MdPriceChange,
+} from "react-icons/md";
 import { categories } from "../utils/data";
+import { storage } from "../firebase.config";
 import Loader from "./Loader";
 import { upload } from "@testing-library/user-event/dist/upload";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytesResumable,
+} from "firebase/storage";
+import { onSnapshot } from "firebase/firestore";
+import { saveItem } from "../utils/firebaseFunctions";
 
 const CreateContainer = () => {
   const [title, setTitle] = useState("");
@@ -17,7 +32,109 @@ const CreateContainer = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [imageAsset, setImageAsset] = useState(null);
 
-  const uploadImage = () => {};
+  const uploadImage = (e) => {
+    setIsLoading(true);
+    const imageFile = e.target.files[0];
+    console.log(imageFile);
+    const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`);
+    const uploadTask = uploadBytesResumable(storageRef, imageFile);
+
+    uploadTask.on(
+      "state_changed",
+      (snapshot) => {
+        const uploadProgess =
+          (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      },
+      (error) => {
+        console.log(error);
+        setFields(true);
+        setMsg("Error while uploading : Try again");
+        setAlertStatus("danger");
+        setTimeout(() => {
+          setFields(false);
+          setIsLoading(false);
+        }, 4000);
+      },
+      () => {
+        getDownloadURL(uploadTask.snapshot.ref).then((downloadUrl) => {
+          setImageAsset(downloadUrl);
+          setIsLoading(false);
+          setFields(true);
+          setMsg("Upload success!");
+          setAlertStatus("success");
+          setTimeout(() => {
+            setFields(false);
+          }, 4000);
+        });
+      }
+    );
+  };
+
+  const deleteImage = () => {
+    setIsLoading(true);
+    const deleteRef = ref(storage, imageAsset);
+    deleteObject(deleteRef).then(() => {
+      setImageAsset(null);
+      setIsLoading(false);
+      setMsg("Image Deleted success!");
+      setAlertStatus("success");
+      setTimeout(() => {
+        setFields(false);
+      }, 4000);
+    });
+  };
+
+  const saveDetails = () => {
+    setIsLoading(true);
+    try {
+      if (!title || !calories || !price || !imageAsset || !category) {
+        setFields(true);
+        setMsg("Required fields can't be empty");
+        setAlertStatus("danger");
+        setTimeout(() => {
+          setFields(false);
+          setIsLoading(false);
+        }, 4000);
+      } else {
+        const data = {
+          id: `${Date.now()}`,
+          title: title,
+          calories: calories,
+          categories: categories,
+          imageURL: imageAsset,
+          price: price,
+          qty: 1,
+        };
+
+        saveItem(data);
+        setIsLoading(false);
+        setFields(true);
+        setMsg("Saved success!");
+        setAlertStatus("success");
+        clearData();
+        setTimeout(() => {
+          setFields(false);
+        }, 4000);
+      }
+    } catch (error) {
+      console.log(error);
+      setFields(true);
+      setMsg("Error while uploading : Try again");
+      setAlertStatus("danger");
+      setTimeout(() => {
+        setFields(false);
+        setIsLoading(false);
+      }, 4000);
+    }
+  };
+
+  const clearData = () => {
+    setTitle("");
+    setCalories("");
+    setPrice("");
+    setImageAsset(null);
+    setCategory("Select Category");
+  }
 
   return (
     <div className="w-full min-h-screen flex items-center justify-center">
@@ -94,13 +211,64 @@ const CreateContainer = () => {
                 </>
               ) : (
                 <>
-                <div className="relative h-full">
-                  <img src={imageAsset} alt="upload image" />
-                </div>
+                  <div className="relative h-full">
+                    <img
+                      src={imageAsset}
+                      alt="upload image"
+                      className="w-full h-full object-cover"
+                    />
+                    <button
+                      type="button"
+                      className="absolute bottom-3 right-3 p-3 rounded-full bg-red-500 text-xl 
+                      cursor-pointer outline-none hover:shadow-lg transition-all duration-500 ease-in-out"
+                      onClick={deleteImage}
+                    >
+                      <MdDelete className="text-white" />
+                    </button>
+                  </div>
                 </>
               )}
             </>
           )}
+        </div>
+        <div className="w-full flex flex-col items-center md:flex-row">
+          <div className="w-full flex py-2 border-b border-gray-300 items-center gap-2">
+            <MdFoodBank className="text-gray-500 text-2xl" />
+            <input
+              required
+              value={calories}
+              onChange={(e) => {
+                setCalories(e.target.value);
+              }}
+              type="text"
+              placeholder="Calories"
+              className="text-lg font-semibold bg-transparent outline-none border-none placeholder:text-gray-400 text-textColor"
+            />
+          </div>
+        </div>
+        <div className="w-full flex flex-col items-center md:flex-row">
+          <div className="w-full flex py-2 border-b border-gray-300 items-center gap-2">
+            <MdPriceChange className="text-gray-500 text-2xl" />
+            <input
+              required
+              value={price}
+              onChange={(e) => {
+                setPrice(e.target.value);
+              }}
+              type="text"
+              placeholder="Prcie"
+              className="text-lg font-semibold bg-transparent outline-none border-none placeholder:text-gray-400 text-textColor"
+            />
+          </div>
+        </div>
+        <div className="w-full flex items-center">
+          <button
+            type="button"
+            className="w-full justify-center items-center flex rounded-lg bg-emerald-500 text-lg font-semibold py-2 text-white"
+            onClick={saveDetails}
+          >
+            Save
+          </button>
         </div>
       </div>
     </div>
