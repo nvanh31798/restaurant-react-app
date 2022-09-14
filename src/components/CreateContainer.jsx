@@ -31,6 +31,7 @@ const CreateContainer = () => {
   const [msg, setMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [imageAsset, setImageAsset] = useState(null);
+  const [{foodItems},dispatch] =   useStateValue();
 
   const uploadImage = (e) => {
     setIsLoading(true);
@@ -100,13 +101,14 @@ const CreateContainer = () => {
           id: `${Date.now()}`,
           title: title,
           calories: calories,
-          categories: categories,
+          category: category,
           imageURL: imageAsset,
           price: price,
           qty: 1,
         };
 
         saveItem(data);
+        console.log(data)
         setIsLoading(false);
         setFields(true);
         setMsg("Saved success!");

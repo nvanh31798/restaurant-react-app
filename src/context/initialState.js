@@ -4,7 +4,7 @@ const userInfo = fetchUser();
 
 const initialState = {
     user: userInfo,
+    foodItems: null,
 };
 
-// console.log(initialState);
 export default initialState;
