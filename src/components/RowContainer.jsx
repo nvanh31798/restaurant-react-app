@@ -2,20 +2,23 @@ import React from "react";
 import { MdShoppingBasket } from "react-icons/md";
 import { motion } from "framer-motion";
 
-const RowContainer = ({ flag }) => {
+const RowContainer = ({ flag, data}) => {
+  console.log('data',data)
   return (
     <div
-      className={`w-full my-12 ${
+      className={`w-ful flex items-center my-12 ${
         flag ? "overflow-x-scroll" : " overflow-x-hidden"
       }`}
     >
-      <div className="w-300 md:w-340 bg-cardOverlay rounded-lg p-2 h-auto backdrop-blur-lg my-12 hover:drop-shadow-xl hover:opacity-0.5">
-        <div className="w-full flex items-center justify-between">
+      {data && 
+      data.map((item) => (
+        <div key={item.id} className="ml-3 flex-wrap gap-3 w-300 md:w-340 bg-cardOverlay rounded-lg p-2 h-auto backdrop-blur-lg my-12 hover:drop-shadow-xl hover:opacity-0.5">
+        <div className="w-full w-300 md:min-w-[300px] md:flex md:flex-col items-center justify-between">
           <motion.img
             whileHover={{ scale: 1.2 }}
             src="https://firebasestorage.googleapis.com/v0/b/restaurantapp-92b53.appspot.com/o/Images%2F1663118156394-r2.png?alt=media&token=f3f4bfe4-807a-4907-a3a5-676d0b123d4e"
             alt=""
-            className="w-40 -mt-8"
+            className="w-40 -mt-8 drop-shadow-2xl"
           />
           <motion.div
             whileTap={{ scale: 0.75 }}
@@ -37,6 +40,7 @@ const RowContainer = ({ flag }) => {
           </div>
         </div>
       </div>
+      ))}
     </div>
   );
 };
