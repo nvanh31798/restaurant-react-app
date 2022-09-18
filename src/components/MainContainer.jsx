@@ -4,9 +4,15 @@ import { motion } from "framer-motion";
 import { MdChevronLeft, MdChevronRight, mdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
+import { useRef, useEffect, useState } from "react";
 
 const MainContainer = () => {
-  const [{foodItems}, dispatch] =   useStateValue();
+  const [{ foodItems }, dispatch] = useStateValue();
+  const [scrollValue, setScrollValue] = useState(0);
+  const [onScrollClicked, setOnScrollClicked] = useState(true);
+
+  useEffect(() => {}, [scrollValue]);
+
   return (
     <div className="flex flex-col w-full h-auto">
       <HomeContainer />
@@ -26,19 +32,34 @@ const MainContainer = () => {
             <motion.div
               whileTap={{ scale: 0.75 }}
               className="w-8 h-8 rounded-lg bg-orange-200 hover:bg-orange-500 cursor-pointer flex items-center justify-center hover:shadow-lg"
+              onClick={() => {
+                setOnScrollClicked(!onScrollClicked);
+                console.log("scv",onScrollClicked)
+                setScrollValue(-400);
+              }}
             >
               <MdChevronLeft className="text-base text-white text-lg"></MdChevronLeft>
             </motion.div>
             <motion.div
               whileTap={{ scale: 0.75 }}
               className="w-8 h-8 rounded-lg bg-orange-200 hover:bg-orange-500 cursor-pointer flex items-center justify-center hover:shadow-lg"
+              onClick={() => {
+                setOnScrollClicked(!onScrollClicked);
+                console.log("sdf",onScrollClicked)
+                setScrollValue(400);
+              }}
             >
               <MdChevronRight className="text-white text-lg"></MdChevronRight>
             </motion.div>
           </div>
         </div>
 
-        <RowContainer flag={true} data={foodItems?.filter(n => n.category === "fruits")}/>
+        <RowContainer
+          onScrollClicked={onScrollClicked}
+          scrollValue={scrollValue}
+          flag={true}
+          data={foodItems}
+        />
       </section>
     </div>
   );
