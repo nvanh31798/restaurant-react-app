@@ -1,19 +1,19 @@
 import React from "react";
 import HomeContainer from "./HomeContainer";
 import { motion } from "framer-motion";
-import { MdChevronLeft, MdChevronRight, mdChevronRight } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
-import { useRef, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
 
 const MainContainer = () => {
-  const [{ foodItems }, dispatch] = useStateValue();
+  const [{ foodItems, cartShow }, dispatch] = useStateValue();
   const [scrollValue, setScrollValue] = useState(0);
   const [onScrollClicked, setOnScrollClicked] = useState(true);
 
-  useEffect(() => {}, [scrollValue]);
+  useEffect(() => {}, [scrollValue, cartShow]);
 
   return (
     <div className="flex flex-col w-full h-auto">
@@ -62,10 +62,8 @@ const MainContainer = () => {
         />
       </section>
 
-
-      <MenuContainer/>
-
-      <CartContainer/>
+      <MenuContainer />
+      {cartShow && <CartContainer />}
     </div>
   );
 };

@@ -17,7 +17,7 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
         flag ? "overflow-x-scroll scrollbar-none" : " overflow-x-hidden"
       }`}
     >
-      {(data?.length >0 ) ? (
+      {data?.length > 0 ? (
         data.map((item) => (
           <div
             key={item.id}
@@ -56,8 +56,10 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
         ))
       ) : (
         <div className="w-full flex items-center justify-center ">
-          <img src={NotFound} className="w-full h-30"/>
-          <p className="absolute text-red-500 md:text-2xl text-xs">Items Not Found</p>
+          <img src={NotFound} className="w-full h-30" />
+          <p className="absolute text-red-500 md:text-2xl text-xs">
+            Items Not Found
+          </p>
         </div>
       )}
     </div>
