@@ -17,7 +17,7 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
         flag ? "overflow-x-scroll scrollbar-none" : " overflow-x-hidden"
       }`}
     >
-      {(data!=='undefined' && data.length >0) ? (
+      {(data?.length >0 ) ? (
         data.map((item) => (
           <div
             key={item.id}
