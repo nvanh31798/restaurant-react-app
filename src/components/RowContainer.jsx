@@ -8,7 +8,6 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
 const rowContainer = useRef()
 useEffect(() => {
   rowContainer.current.scrollLeft += scrollValue;
-  console.log('re',scrollValue)
 }, [onScrollClicked])
 
   return (
@@ -27,9 +26,9 @@ useEffect(() => {
             <div className="w-full w-300 md:min-w-[300px] md:flex md:flex-col items-center justify-between">
               <motion.img
                 whileHover={{ scale: 1.2 }}
-                src="https://firebasestorage.googleapis.com/v0/b/restaurantapp-92b53.appspot.com/o/Images%2F1663118156394-r2.png?alt=media&token=f3f4bfe4-807a-4907-a3a5-676d0b123d4e"
+                src={item.imageURL}
                 alt=""
-                className="w-40 -mt-8 drop-shadow-2xl"
+                className="w-40 h-40 -mt-8 drop-shadow-2xl"
               />
               <motion.div
                 whileTap={{ scale: 0.75 }}
@@ -41,12 +40,12 @@ useEffect(() => {
 
             <div className="w-full flex flex-col items-end justify-end">
               <p className="text-textColor font-semibold text-base md:text-lg">
-                Chocolate & Vanila
+                {item.title}
               </p>
-              <p className="mt-1 text-sm text-gray-500">45 Calories</p>
+              <p className="mt-1 text-sm text-gray-500">{item.calories} Calories</p>
               <div className="flex items-center gap-8">
                 <p className="text-lg text-textColor font-semibold">
-                  <span className="text-sm text-red-500">$</span>5.25
+                  <span className="text-sm text-red-500">$</span>{item.price}
                 </p>
               </div>
             </div>

@@ -5,6 +5,7 @@ import { MdChevronLeft, MdChevronRight, mdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
 import { useRef, useEffect, useState } from "react";
+import MenuContainer from "./MenuContainer";
 
 const MainContainer = () => {
   const [{ foodItems }, dispatch] = useStateValue();
@@ -34,7 +35,6 @@ const MainContainer = () => {
               className="w-8 h-8 rounded-lg bg-orange-200 hover:bg-orange-500 cursor-pointer flex items-center justify-center hover:shadow-lg"
               onClick={() => {
                 setOnScrollClicked(!onScrollClicked);
-                console.log("scv",onScrollClicked)
                 setScrollValue(-400);
               }}
             >
@@ -45,7 +45,6 @@ const MainContainer = () => {
               className="w-8 h-8 rounded-lg bg-orange-200 hover:bg-orange-500 cursor-pointer flex items-center justify-center hover:shadow-lg"
               onClick={() => {
                 setOnScrollClicked(!onScrollClicked);
-                console.log("sdf",onScrollClicked)
                 setScrollValue(400);
               }}
             >
@@ -61,6 +60,9 @@ const MainContainer = () => {
           data={foodItems}
         />
       </section>
+
+
+      <MenuContainer/>
     </div>
   );
 };

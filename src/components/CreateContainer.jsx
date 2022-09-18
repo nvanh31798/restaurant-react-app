@@ -39,7 +39,6 @@ const CreateContainer = () => {
   const uploadImage = (e) => {
     setIsLoading(true);
     const imageFile = e.target.files[0];
-    console.log(imageFile);
     const storageRef = ref(storage, `Images/${Date.now()}-${imageFile.name}`);
     const uploadTask = uploadBytesResumable(storageRef, imageFile);
 
@@ -111,7 +110,6 @@ const CreateContainer = () => {
         };
 
         saveItem(data);
-        console.log(data)
         setIsLoading(false);
         setFields(true);
         setMsg("Saved success!");
