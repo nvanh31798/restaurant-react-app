@@ -2,22 +2,22 @@ import React from "react";
 import { MdShoppingBasket } from "react-icons/md";
 import { motion } from "framer-motion";
 import { useRef, useEffect } from "react";
+import NotFound from "../img/NotFound.svg";
 
 const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
-
-const rowContainer = useRef()
-useEffect(() => {
-  rowContainer.current.scrollLeft += scrollValue;
-}, [onScrollClicked])
+  const rowContainer = useRef();
+  useEffect(() => {
+    rowContainer.current.scrollLeft += scrollValue;
+  }, [onScrollClicked]);
 
   return (
     <div
-    ref={rowContainer}
+      ref={rowContainer}
       className={`w-ful flex items-center gap-3 my-12 scroll-smooth ${
         flag ? "overflow-x-scroll scrollbar-none" : " overflow-x-hidden"
       }`}
     >
-      {data &&
+      {(data!=='undefined' && data.length >0) ? (
         data.map((item) => (
           <div
             key={item.id}
@@ -42,15 +42,24 @@ useEffect(() => {
               <p className="text-textColor font-semibold text-base md:text-lg">
                 {item.title}
               </p>
-              <p className="mt-1 text-sm text-gray-500">{item.calories} Calories</p>
+              <p className="mt-1 text-sm text-gray-500">
+                {item.calories} Calories
+              </p>
               <div className="flex items-center gap-8">
                 <p className="text-lg text-textColor font-semibold">
-                  <span className="text-sm text-red-500">$</span>{item.price}
+                  <span className="text-sm text-red-500">$</span>
+                  {item.price}
                 </p>
               </div>
             </div>
           </div>
-        ))}
+        ))
+      ) : (
+        <div className="w-full flex items-center justify-center ">
+          <img src={NotFound} className="w-full h-30"/>
+          <p className="absolute text-red-500 md:text-2xl text-xs">Items Not Found</p>
+        </div>
+      )}
     </div>
   );
 };

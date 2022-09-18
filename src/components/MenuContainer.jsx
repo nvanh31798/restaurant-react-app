@@ -4,9 +4,11 @@ import { useState } from "react";
 import { categories } from "../utils/data";
 import { motion } from "framer-motion";
 import RowContainer from "./RowContainer";
+import { useStateValue } from "../context/StateProvider";
 
 const MenuContainer = () => {
   const [filter, setFilter] = useState("chicken");
+  const [{ foodItems }, dispatch] = useStateValue();
   return (
     <section className="w-full my-6">
       <div className="w-full flex flex-col items-center justify-center">
@@ -22,7 +24,7 @@ const MenuContainer = () => {
           className="w-full flex items-center justify-start lg:justify-center gap-8 py-6 overflow-x-scroll
      scrollbar-none"
         >
-          {categories &&
+          {categories && (
             categories.map((category) => (
               <motion.div
                 whileTap={{ scale: 0.75 }}
@@ -58,11 +60,16 @@ const MenuContainer = () => {
                   {category.name}
                 </p>
               </motion.div>
-            ))}
+            ))
+          )}
         </div>
 
         <div className="w-full">
-            <RowContainer flag={false}/>
+          <RowContainer
+            className="scroll-smooth"
+            flag={false}
+            data={foodItems?.filter((n) => n.category == filter)}
+          />
         </div>
       </div>
     </section>
