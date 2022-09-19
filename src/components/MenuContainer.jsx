@@ -24,7 +24,7 @@ const MenuContainer = () => {
           className="w-full flex items-center justify-start lg:justify-center gap-8 py-6 overflow-x-scroll
      scrollbar-none"
         >
-          {categories && (
+          {categories &&
             categories.map((category) => (
               <motion.div
                 whileTap={{ scale: 0.75 }}
@@ -60,8 +60,7 @@ const MenuContainer = () => {
                   {category.name}
                 </p>
               </motion.div>
-            ))
-          )}
+            ))}
         </div>
 
         <div className="w-full">
