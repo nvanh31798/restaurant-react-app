@@ -8,7 +8,7 @@ import { actionType } from "../context/reducer";
 
 const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
   const rowContainer = useRef();
-  const [{cartItems}, dispatch] = useStateValue();
+  const [{ cartItems }, dispatch] = useStateValue();
   const [items, setItems] = useState([]);
 
   const addToCart = () => {
@@ -16,7 +16,7 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
       type: actionType.SET_CART_ITEMS,
       cartItems: items,
     });
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    localStorage.setItem("cartItems", JSON.stringify(items));
   };
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const RowContainer = ({ onScrollClicked, scrollValue, flag, data }) => {
         flag ? "overflow-x-scroll scrollbar-none" : " overflow-x-hidden"
       }`}
     >
-      {data?.length > 0 ? (
+      {data && data.length > 0 ? (
         data.map((item) => (
           <div
             key={item.id}
