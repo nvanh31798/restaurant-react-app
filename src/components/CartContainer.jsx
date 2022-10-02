@@ -9,19 +9,27 @@ import { actionType } from "../context/reducer";
 const CartContainer = () => {
   const [{ cartItems, cartShow }, dispatch] = useStateValue();
 
-  const removeCart = (itemId) => {
+  const removeCartItem = (itemId) => {
     cartItems.splice(
       cartItems.findIndex((item) => {
         return item.id === itemId;
       }),
       1
     );
-
     dispatch({
       type: actionType.SET_CART_ITEMS,
       cartItems: cartItems,
     });
     localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  };
+
+  const cleanCart = () => {
+    const clearCart = [];
+    dispatch({
+      type: actionType.SET_CART_ITEMS,
+      cartItems: clearCart,
+    });
+    localStorage.setItem("cartItems", JSON.stringify(clearCart));
   };
 
   const addToCart = (itemId) => {
@@ -64,6 +72,7 @@ const CartContainer = () => {
 
         <motion.p
           whileTap={{ scale: 0.75 }}
+          onClick={() => cleanCart()}
           className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-100 rounded-md hover:shadow-md cursor-pointer text-base text-textColor"
         >
           Clear <RiRefreshFill />{" "}
@@ -96,7 +105,7 @@ const CartContainer = () => {
                 <div className="group flex items-center gap-2 ml-auto cursor-pointer">
                   <motion.div
                     whileTap={{ scale: 0.75 }}
-                    onClick={() => removeCart(cartItem.id)}
+                    onClick={() => removeCartItem(cartItem.id)}
                   >
                     <BiMinus className="text-gray-50" />
                   </motion.div>
